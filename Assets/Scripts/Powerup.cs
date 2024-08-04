@@ -53,7 +53,6 @@ public class Powerup : MonoBehaviour
                         player.ShieldActive();
                         break;
                     default:
-                        Debug.Log("ur mother");
                         break;
                 }
 

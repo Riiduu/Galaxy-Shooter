@@ -19,6 +19,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 5f;
 
+    // Score
+    [SerializeField]
+    private int _score;
+
     //Spawner
     private SpawnManager _spawnManager;
 
@@ -36,6 +40,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _shield;
 
+    // UI and Game managers
+    private UIManager _uiManager;
+    private GameManager _gameManager;
+
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +56,15 @@ public class Player : MonoBehaviour
         if (_spawnManager == null)
         {
             Debug.LogError("Error: Spawn manager is NULL");
+        }
+
+        // ui manager initialization
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        if (_uiManager == null)
+        {
+            Debug.Log("UI manager is NULL");
         }
     }
 
@@ -124,7 +141,10 @@ public class Player : MonoBehaviour
         {
             _lives -= 1;
         }
-        
+
+
+        _uiManager.UpdateLives(_lives);
+        _gameManager.GameOverFunctionality();
 
         Debug.Log("Lives: " + _lives);
 
@@ -135,7 +155,7 @@ public class Player : MonoBehaviour
             // set player to dead in spawnmanager
             _spawnManager.OnPlayerDeath();
 
-            Debug.Log("U dead nigga");
+            _uiManager.GameOver();
         }
     }
 
@@ -177,4 +197,13 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5);
         _tripleShotActive = false;       
     }
+
+    public void AddScore(int points)
+    {
+        _score += points;
+        
+        _uiManager.UpdateScore(_score);
+    }
+
+    
 }
