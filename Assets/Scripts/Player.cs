@@ -44,6 +44,12 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     private GameManager _gameManager;
 
+    // Damage Engines
+    [SerializeField]
+    private GameObject _leftEngine;
+    [SerializeField]
+    private GameObject _rightEngine;
+
 
     // Start is called before the first frame update
     void Start()
@@ -157,6 +163,36 @@ public class Player : MonoBehaviour
 
             _uiManager.GameOver();
         }
+
+        if (_lives > 1)
+        {
+            int engine = UnityEngine.Random.Range(1, 2);
+
+            if (engine == 1)
+            {
+                StartCoroutine(LeftEngineAnim());
+            }
+            else if (engine == 2)
+            {
+                StartCoroutine(RightEngineAnim());
+            } else
+            {
+                Debug.Log("Something wrong: " + engine);
+            }
+        }
+    }
+
+    IEnumerator LeftEngineAnim()
+    {
+        _leftEngine.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        _leftEngine.SetActive(false);
+    }
+
+    IEnumerator RightEngineAnim() {
+        _rightEngine.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        _rightEngine.SetActive(false);
     }
 
     public void TripleShotActive()

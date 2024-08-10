@@ -10,10 +10,25 @@ public class Enemy : MonoBehaviour
 
     private Player _player;
 
+    private Animator _animator;
+
+    // Explosion Audio Component
+    private AudioSource _audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
-        _player = GameObject.Find("Player").GetComponent<Player>();    
+
+        _audioSource = GetComponent<AudioSource>();
+        if (_player == null)
+        {
+            _player = GameObject.Find("Player").GetComponent<Player>();
+        }
+
+        if (_animator == null)
+        {
+            _animator = GetComponent<Animator>();
+        }
     }
 
     // Update is called once per frame
@@ -47,8 +62,12 @@ public class Enemy : MonoBehaviour
                 Debug.Log("Player null");
             }
 
-            // self-destruct
-            Destroy(this.gameObject);
+            // self-destruct & trigger the self-destruct animation
+            _animator.SetTrigger("OnEnemyDeath");
+            _speed = 0;
+            _audioSource.Play();
+            Destroy(this.gameObject, 2.5f);
+            
         }
         
         
@@ -67,7 +86,13 @@ public class Enemy : MonoBehaviour
             Destroy(other.gameObject);
             // self-destruct
             // add 10 to score
-            Destroy(this.gameObject);
+
+            //trigger the destruction animation
+            _animator.SetTrigger("OnEnemyDeath");
+            _speed = 0;
+            _audioSource.Play();
+            Destroy(this.gameObject, 2.5f);
+            
         }
         
     }

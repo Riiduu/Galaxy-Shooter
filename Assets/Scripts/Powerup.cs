@@ -16,6 +16,10 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     private int _powerID;
 
+    // Powerup pick-up audio component
+    [SerializeField]
+    private AudioClip _clip;
+
     // Update is called once per frame
     void Update()
     {
@@ -34,6 +38,8 @@ public class Powerup : MonoBehaviour
     {
         Player player = collision.transform.GetComponent<Player>();
 
+        AudioSource.PlayClipAtPoint(_clip, transform.position);
+
         if (collision.tag == "Player")
         {
             Debug.Log("Powerup Collected");
@@ -41,13 +47,13 @@ public class Powerup : MonoBehaviour
 
             if (player != null)
             {
-                switch(_powerID)
+                switch (_powerID)
                 {
                     case 0:
                         player.TripleShotActive();
                         break;
                     case 1:
-                        player.SpeedActive(); 
+                        player.SpeedActive();
                         break;
                     case 2:
                         player.ShieldActive();
@@ -56,16 +62,8 @@ public class Powerup : MonoBehaviour
                         break;
                 }
 
-                if (_powerID == 0)
-                {
-                    player.TripleShotActive();
-                }
-                else if (_powerID == 1)
-                {
-                    player.SpeedActive();
-                }
-                
             }
+
             
             Destroy(this.gameObject);
         }
